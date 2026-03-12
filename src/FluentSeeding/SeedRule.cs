@@ -21,6 +21,13 @@ where T : class
         return this;
     }
 
+    public SeedRule<T, TProperty> UseFactory(Func<TProperty> value)
+    {
+        _valueFactory = value;
+        return this;
+        
+    }
+
     public SeedRule<T, TProperty> UseFrom(params TProperty[] values)
     {
         var random = new Random();
