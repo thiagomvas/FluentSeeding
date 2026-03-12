@@ -15,17 +15,15 @@ public sealed class SeederRunner
     {
         foreach (var seeder in _seeders)
         {
-            var entities = seeder.SeedInternal();
-            _persistenceLayer.Persist(entities);
+            seeder.PersistTo(_persistenceLayer);
         }
     }
-    
+
     public async Task RunAsync(CancellationToken cancellationToken = default)
     {
         foreach (var seeder in _seeders)
         {
-            var entities = seeder.SeedInternal();
-            await _persistenceLayer.PersistAsync(entities, cancellationToken);
+            await seeder.PersistToAsync(_persistenceLayer, cancellationToken);
         }
     }
 }

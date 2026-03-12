@@ -28,7 +28,7 @@ public sealed class SeedRunnerTests
         sut.Run();
 
         // Assert
-        _persistenceLayer.DidNotReceive().Persist(Arg.Any<IEnumerable<object>>());
+        _persistenceLayer.DidNotReceiveWithAnyArgs().Persist(Arg.Any<IEnumerable<object>>());
     }
 
     [Test]
@@ -42,7 +42,7 @@ public sealed class SeedRunnerTests
         sut.Run();
 
         // Assert
-        _persistenceLayer.Received(1).Persist(Arg.Any<IEnumerable<object>>());
+        _persistenceLayer.Received(1).Persist(Arg.Any<IEnumerable<Product>>());
     }
 
     [Test]
@@ -56,7 +56,8 @@ public sealed class SeedRunnerTests
         sut.Run();
 
         // Assert
-        _persistenceLayer.Received(2).Persist(Arg.Any<IEnumerable<object>>());
+        _persistenceLayer.Received(1).Persist(Arg.Any<IEnumerable<User>>());
+        _persistenceLayer.Received(1).Persist(Arg.Any<IEnumerable<Product>>());
     }
 
     [Test]
@@ -71,7 +72,7 @@ public sealed class SeedRunnerTests
         sut.Run();
 
         // Assert
-        inMemory.GetEntities<object>().Should().HaveCount(5);
+        inMemory.GetEntities<Product>().Should().HaveCount(5);
     }
 
     [Test]
@@ -86,8 +87,7 @@ public sealed class SeedRunnerTests
         sut.Run();
 
         // Assert
-        var products = inMemory.GetEntities<object>().Cast<Product>().ToList();
-        products.Should().AllSatisfy(p =>
+        inMemory.GetEntities<Product>().Should().AllSatisfy(p =>
         {
             p.Name.Should().Be("Sample Product");
             p.Price.Should().Be(9.99m);
@@ -106,7 +106,8 @@ public sealed class SeedRunnerTests
         sut.Run();
 
         // Assert
-        inMemory.GetEntities<object>().Should().HaveCount(15); // 10 users + 5 products
+        inMemory.GetEntities<User>().Should().HaveCount(10);
+        inMemory.GetEntities<Product>().Should().HaveCount(5);
     }
 
     [Test]
@@ -119,7 +120,7 @@ public sealed class SeedRunnerTests
         await sut.RunAsync();
 
         // Assert
-        await _persistenceLayer.DidNotReceive().PersistAsync(Arg.Any<IEnumerable<object>>(), Arg.Any<CancellationToken>());
+        await _persistenceLayer.DidNotReceiveWithAnyArgs().PersistAsync(Arg.Any<IEnumerable<object>>(), Arg.Any<CancellationToken>());
     }
 
     [Test]
@@ -133,7 +134,7 @@ public sealed class SeedRunnerTests
         await sut.RunAsync();
 
         // Assert
-        await _persistenceLayer.Received(1).PersistAsync(Arg.Any<IEnumerable<object>>(), Arg.Any<CancellationToken>());
+        await _persistenceLayer.Received(1).PersistAsync(Arg.Any<IEnumerable<Product>>(), Arg.Any<CancellationToken>());
     }
 
     [Test]
@@ -147,7 +148,8 @@ public sealed class SeedRunnerTests
         await sut.RunAsync();
 
         // Assert
-        await _persistenceLayer.Received(2).PersistAsync(Arg.Any<IEnumerable<object>>(), Arg.Any<CancellationToken>());
+        await _persistenceLayer.Received(1).PersistAsync(Arg.Any<IEnumerable<User>>(), Arg.Any<CancellationToken>());
+        await _persistenceLayer.Received(1).PersistAsync(Arg.Any<IEnumerable<Product>>(), Arg.Any<CancellationToken>());
     }
 
     [Test]
@@ -162,7 +164,7 @@ public sealed class SeedRunnerTests
         await sut.RunAsync(cts.Token);
 
         // Assert
-        await _persistenceLayer.Received(1).PersistAsync(Arg.Any<IEnumerable<object>>(), cts.Token);
+        await _persistenceLayer.Received(1).PersistAsync(Arg.Any<IEnumerable<Product>>(), cts.Token);
     }
 
     [Test]
@@ -177,7 +179,7 @@ public sealed class SeedRunnerTests
         await sut.RunAsync();
 
         // Assert
-        inMemory.GetEntities<object>().Should().HaveCount(5);
+        inMemory.GetEntities<Product>().Should().HaveCount(5);
     }
 
     [Test]
@@ -192,6 +194,7 @@ public sealed class SeedRunnerTests
         await sut.RunAsync();
 
         // Assert
-        inMemory.GetEntities<object>().Should().HaveCount(15); // 10 users + 5 products
+        inMemory.GetEntities<User>().Should().HaveCount(10);
+        inMemory.GetEntities<Product>().Should().HaveCount(5);
     }
 }

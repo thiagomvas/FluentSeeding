@@ -6,8 +6,8 @@
   <ItemGroup>
     <!-- Production -->
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.5" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
-
     <!-- Test -->
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="FluentAssertions" Version="8.8.0" />

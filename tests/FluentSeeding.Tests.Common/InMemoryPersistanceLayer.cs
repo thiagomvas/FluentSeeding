@@ -3,7 +3,7 @@ namespace FluentSeeding.Tests.Common;
 public sealed class InMemoryPersistenceLayer : IPersistenceLayer
 {
     private readonly Dictionary<Type, List<object>> _storage = new();
-    public void Persist<T>(IEnumerable<T> entities)
+    public void Persist<T>(IEnumerable<T> entities) where T : class
     {
         var type = typeof(T);
         if (!_storage.ContainsKey(type))
@@ -14,7 +14,7 @@ public sealed class InMemoryPersistenceLayer : IPersistenceLayer
         
     }
 
-    public Task PersistAsync<T>(IEnumerable<T> entities, CancellationToken cancellationToken = default)
+    public Task PersistAsync<T>(IEnumerable<T> entities, CancellationToken cancellationToken = default) where T : class
     {
         Persist(entities);
         return Task.CompletedTask;

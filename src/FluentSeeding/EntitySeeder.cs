@@ -16,4 +16,14 @@ public abstract class EntitySeeder<T> : EntitySeederBase
     {
         return Seed();
     }
+
+    internal override void PersistTo(IPersistenceLayer persistenceLayer)
+    {
+        persistenceLayer.Persist(Seed());
+    }
+
+    internal override Task PersistToAsync(IPersistenceLayer persistenceLayer, CancellationToken cancellationToken)
+    {
+        return persistenceLayer.PersistAsync(Seed(), cancellationToken);
+    }
 }
