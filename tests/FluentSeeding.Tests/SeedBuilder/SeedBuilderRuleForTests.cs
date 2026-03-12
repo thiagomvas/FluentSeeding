@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentSeeding.Tests.Common;
 
 namespace FluentSeeding.Tests.SeedBuilder;
 
@@ -69,5 +70,32 @@ public sealed class SeedBuilderRuleForTests
 
         // Assert
         act.Should().Throw<InvalidOperationException>();
+    }
+
+    [Test]
+    public void RuleFor_WithDirectProperty_DoesNotThrow()
+    {
+        // Arrange
+        var builder = new SeedBuilder<User>();
+
+        // Act
+        Action act = () => builder.RuleFor(u => u.Name);
+
+        // Assert
+        act.Should().NotThrow();
+    }
+
+    [Test]
+    public void RuleFor_WithNestedProperty_ThrowsArgumentException()
+    {
+        // Arrange
+        var builder = new SeedBuilder<Profile>();
+
+        // Act
+        Action act = () => builder.RuleFor(p => p.User.Name);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithParameterName("selector");
     }
 }

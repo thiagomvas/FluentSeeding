@@ -49,8 +49,17 @@ public sealed class SeedBuilder<T> where T : class
     /// </summary>
     /// <param name="selector">A member expression identifying the property to configure (e.g. <c>x => x.Name</c>).</param>
     /// <returns>A <see cref="SeedRule{T,TProperty}"/> for configuring how the property is populated.</returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown when <paramref name="selector"/> refers to a nested property (e.g. <c>x => x.Address.City</c>).
+    /// Only direct properties of <typeparamref name="T"/> are supported.
+    /// </exception>
     public SeedRule<T, TProperty> RuleFor<TProperty>(Expression<Func<T, TProperty>> selector)
     {
+        if (selector.Body is not MemberExpression { Expression: ParameterExpression })
+            throw new ArgumentException(
+                $"Selector must target a direct property of {typeof(T).Name}. Nested property access is not supported.",
+                nameof(selector));
+
         var rule = new SeedRule<T, TProperty>(selector, this);
         _rules.Add(rule);
         return rule;
