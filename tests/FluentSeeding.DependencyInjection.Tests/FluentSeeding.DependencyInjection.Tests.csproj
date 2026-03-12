@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\FluentSeeding.DependencyInjection\FluentSeeding.DependencyInjection.csproj" />
+    <ProjectReference Include="..\FluentSeeding.Tests.Common\FluentSeeding.Tests.Common.csproj" />
   </ItemGroup>
 
 </Project>
