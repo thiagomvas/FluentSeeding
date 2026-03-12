@@ -58,8 +58,18 @@ where T : class
 
     public SeedBuilder<T> UseFrom(params TProperty[] values)
     {
+        if (values == null || values.Length == 0)
+            throw new ArgumentException("Values collection cannot be null or empty.", nameof(values));
         var random = new Random();
         _valueFactory = () => values[random.Next(values.Length)];
+        return _parent;
+    }
+    public SeedBuilder<T> UseFrom(IEnumerable<TProperty> values)
+    {
+        if (values == null || !values.Any())
+            throw new ArgumentException("Values collection cannot be null or empty.", nameof(values));
+        var random = new Random();
+        _valueFactory = () => values.ElementAt(random.Next(values.Count()));
         return _parent;
     }
     
