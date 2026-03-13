@@ -16,6 +16,9 @@ where T : class
     private readonly Expression<Func<T, TProperty>> _selector;
     private readonly Action<T, TProperty> _setter;
     private readonly SeedBuilder<T> _parent;
+    
+    private HashSet<TProperty>? _seenValues;
+    private bool _unique = false;
 
     private Func<TProperty>? _valueFactory
     {
@@ -46,6 +49,22 @@ where T : class
         _setter = selector.BuildSetter();
     }
 
+    #region  Modifiers
+
+    /// <summary>
+    /// Marks this rule as requiring unique values across all seeded entities. If the configured value source produces duplicates, an exception will be thrown at runtime.
+    /// </summary>
+    /// <returns></returns>
+    public SeedRule<T, TProperty> Unique()
+    {
+        _seenValues ??= new HashSet<TProperty>();
+        _unique = true;
+        return this;
+    }
+
+    #endregion
+    
+    #region Terminals
     /// <summary>
     /// Assigns the same constant <paramref name="value"/> to this property on every seeded entity.
     /// </summary>
@@ -103,7 +122,7 @@ where T : class
         _valueFactory = () => vals.ElementAt(Random.Shared.Next(vals.Count()));
         return _parent;
     }
-
+    #endregion
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException">
     /// Thrown when neither a value nor a factory has been configured for this rule.
@@ -111,16 +130,47 @@ where T : class
     /// </exception>
     public void Apply(T instance, int index = 0)
     {
-        if (_valueFactory is null && _indexedValueFactory is null)
-            throw new InvalidOperationException($"No value or factory configured for '{_selector}'.");
-
+        var val = GenerateValue(instance, index);
+        _setter(instance, val);
+    }
+    
+    private TProperty GenerateValue(T instance, int index)
+    {
+        TProperty value;
         if (_valueFactory != null)
         {
-            _setter(instance, _valueFactory());
+            value = _valueFactory();
         }
         else if (_indexedValueFactory != null)
         {
-            _setter(instance, _indexedValueFactory(index));
+            value = _indexedValueFactory(index);
         }
+        else
+        {
+            throw new InvalidOperationException($"No value or factory configured for '{_selector}'.");
+        }
+
+        if (_unique)
+        {
+            int attempts = 0;
+            do
+            {
+                if (_seenValues!.Add(value))
+                    break; 
+                if (attempts++ > 100)
+                    throw new InvalidOperationException($"Unable to generate a unique value for '{_selector}' after 100 attempts. Consider expanding the value pool, changing your value factory or removing the uniqueness requirement.");
+                
+                if (_valueFactory != null)
+                {
+                    value = _valueFactory();
+                }
+                else if (_indexedValueFactory != null)
+                {
+                    value = _indexedValueFactory(index);
+                }
+            } while (true);
+        }
+
+        return value;
     }
 }
