@@ -13,9 +13,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\FluentSeeding\FluentSeeding.csproj" />
-      <ProjectReference Include="..\src\FluentSeeding.DependencyInjection\FluentSeeding.DependencyInjection.csproj" />
-      <ProjectReference Include="..\src\FluentSeeding.EntityFrameworkCore\FluentSeeding.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\..\src\FluentSeeding\FluentSeeding.csproj" />
+      <ProjectReference Include="..\..\src\FluentSeeding.DependencyInjection\FluentSeeding.DependencyInjection.csproj" />
+      <ProjectReference Include="..\..\src\FluentSeeding.EntityFrameworkCore\FluentSeeding.EntityFrameworkCore.csproj" />
     </ItemGroup>
 
 </Project>
