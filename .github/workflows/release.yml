@@ -1,0 +1,70 @@
+name: Release
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Git tag to release (e.g. v1.2.3 or v1.2.3-beta.1)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run (skip NuGet push)'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Determine Release Version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            RAW_VERSION="${{ inputs.tag }}"
+            DRY_RUN="${{ inputs.dry_run }}"
+          else
+            RAW_VERSION="${GITHUB_REF##*/}"
+            DRY_RUN="false"
+          fi
+          CLEAN_VERSION="${RAW_VERSION#v}"
+          if [[ "${DRY_RUN}" == "true" ]]; then
+            PUSH_NUGET="false"
+          else
+            PUSH_NUGET="true"
+          fi
+          echo "RAW_VERSION=$RAW_VERSION" >> $GITHUB_ENV
+          echo "CLEAN_VERSION=$CLEAN_VERSION" >> $GITHUB_ENV
+          echo "PUSH_NUGET=$PUSH_NUGET" >> $GITHUB_ENV
+
+      - name: Restore
+        run: dotnet restore FluentSeeding.slnx
+
+      - name: Build
+        run: dotnet build FluentSeeding.slnx --configuration Release /p:Version=${{ env.CLEAN_VERSION }}
+
+      - name: Test
+        run: dotnet test FluentSeeding.slnx --configuration Release /p:Version=${{ env.CLEAN_VERSION }}
+
+      - name: Pack
+        run: dotnet pack FluentSeeding.slnx -c Release --no-build /p:Version=${{ env.CLEAN_VERSION }} /p:PackageVersion=${{ env.CLEAN_VERSION }} -o ./artifacts
+
+      - name: Push to NuGet
+        if: ${{ env.PUSH_NUGET == 'true' }}
+        run: dotnet nuget push "./artifacts/*.nupkg" \
+             --api-key ${{ secrets.NUGET_API_KEY }} \
+             --source https://api.nuget.org/v3/index.json \
+             --skip-duplicate
