@@ -5,8 +5,18 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Authors>FluentSeeding Contributors</Authors>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>Thiago Vasconcelos</Authors>
+    <Copyright>Copyright © Thiago Vasconcelos 2026</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/thiagomv/FluentSeeder</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/thiagomv/FluentSeeder</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageTags>seeding;fluent;data;database;efcore</PackageTags>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 </Project>

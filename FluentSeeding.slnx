@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/samples/">
+    <Project Path="FluentSeeding.Samples.AspNetCore/FluentSeeding.Samples.AspNetCore.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/FluentSeeding.DependencyInjection/FluentSeeding.DependencyInjection.csproj" />
     <Project Path="src/FluentSeeding.EntityFrameworkCore/FluentSeeding.EntityFrameworkCore.csproj" />
