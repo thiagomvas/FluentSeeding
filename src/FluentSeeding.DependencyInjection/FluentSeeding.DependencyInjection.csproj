@@ -12,6 +12,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>FluentSeeding.DependencyInjection</PackageId>
+    <Description>Microsoft.Extensions.DependencyInjection integration for FluentSeeding. Registers seeders and related services via IServiceCollection.</Description>
   </PropertyGroup>
 
 </Project>

@@ -13,6 +13,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>FluentSeeding.EntityFrameworkCore</PackageId>
+    <Description>Entity Framework Core persistence layer for FluentSeeding. Implements seeding strategies backed by EF Core DbContext.</Description>
   </PropertyGroup>
 
 </Project>

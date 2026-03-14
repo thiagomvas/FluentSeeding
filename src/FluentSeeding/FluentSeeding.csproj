@@ -4,6 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>FluentSeeding</PackageId>
+    <Description>Core library for FluentSeeding. A fluent, composable API for seeding data in .NET applications.</Description>
   </PropertyGroup>
 
 </Project>
