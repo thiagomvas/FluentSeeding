@@ -1,2 +1,42 @@
 {
+  "person": {
+    "first_name": {
+      "male": [
+        "Miguel", "João", "Pedro", "Lucas", "Mateus",
+        "Rafael", "Gabriel", "Gustavo", "Felipe", "Eduardo",
+        "Bruno", "Rodrigo", "Thiago", "Leandro", "Marcelo",
+        "Carlos", "Paulo", "André", "Ricardo", "Fernando",
+        "Diego", "Henrique", "Leonardo", "Alexandre", "Vinicius",
+        "Daniel", "Caio", "Renato", "Fábio", "Sérgio",
+        "Luiz", "Guilherme", "Marcos", "Vinícius", "Tiago",
+        "Flávio", "Rogério", "Adriano", "Cláudio", "Roberto",
+        "Antônio", "Francisco", "Júnior", "Márcio", "Welton",
+        "Elias", "Samuel", "Davi", "Ítalo", "Murilo"
+      ],
+      "female": [
+        "Ana", "Maria", "Juliana", "Fernanda", "Camila",
+        "Aline", "Beatriz", "Larissa", "Mariana", "Patrícia",
+        "Gabriela", "Letícia", "Vanessa", "Amanda", "Natália",
+        "Jéssica", "Priscila", "Renata", "Tatiana", "Cristina",
+        "Luciana", "Débora", "Claudia", "Simone", "Carla",
+        "Eliane", "Adriana", "Viviane", "Daniela", "Sandra",
+        "Érica", "Mônica", "Bruna", "Carolina", "Andréa",
+        "Flávia", "Roberta", "Sabrina", "Cíntia", "Thais",
+        "Isabela", "Rafaela", "Luana", "Milena", "Edilaine",
+        "Sueli", "Rosana", "Vera", "Lúcia", "Helena"
+      ]
+    },
+    "last_name": [
+      "Silva", "Santos", "Oliveira", "Souza", "Rodrigues",
+      "Ferreira", "Alves", "Pereira", "Lima", "Gomes",
+      "Costa", "Ribeiro", "Martins", "Carvalho", "Almeida",
+      "Lopes", "Sousa", "Fernandes", "Vieira", "Barbosa",
+      "Rocha", "Dias", "Nascimento", "Andrade", "Moreira",
+      "Neves", "Cavalcanti", "Campos", "Cardoso", "Freitas",
+      "Ramos", "Teixeira", "Correia", "Mendes", "Monteiro",
+      "Pinto", "Cunha", "Fonseca", "Araújo", "Castro",
+      "Borges", "Machado", "Pires", "Marques", "Azevedo",
+      "Guimarães", "Melo", "Batista", "Xavier", "Tavares"
+    ]
+  }
 }
