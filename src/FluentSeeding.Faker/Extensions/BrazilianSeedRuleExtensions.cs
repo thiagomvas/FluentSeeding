@@ -15,11 +15,19 @@ public static class BrazilianSeedRuleExtensions
     };
     private const long CnpjSpace = 4_738_381_338_321_616_896L;
 
+    /// <summary>
+    /// Generates a random, valid CPF number. When <paramref name="formatted"/> is <c>true</c>, returns
+    /// the formatted string (e.g. <c>123.456.789-09</c>); otherwise returns the raw digits (e.g. <c>12345678909</c>).
+    /// </summary>
     public static SeedBuilder<T> UseCpf<T>(this SeedRule<T, string> rule, bool formatted = false) where T : class
     {
         return rule.UseFactory(() => GenerateCpf(formatted));
     }
 
+    /// <summary>
+    /// Generates a random, valid CNPJ number. When <paramref name="formatted"/> is <c>true</c>, returns
+    /// the formatted string (e.g. <c>12.345.678/0001-95</c>); otherwise returns the raw alphanumeric string.
+    /// </summary>
     public static SeedBuilder<T> UseCnpj<T>(this SeedRule<T, string> rule, bool formatted = false) where T : class
     {
         return rule.UseFactory(() => GenerateCnpj(formatted));

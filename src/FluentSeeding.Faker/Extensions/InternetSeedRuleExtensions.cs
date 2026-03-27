@@ -63,13 +63,10 @@ public static class InternetSeedRuleExtensions
     }
     
     /// <summary>
-    /// Generates a random IPv4 address.
+    /// Generates a random IPv4 address. When <paramref name="formatted"/> is <c>true</c>, returns
+    /// dot-notation (e.g. <c>192.168.1.1</c>); otherwise returns the raw concatenated octets
+    /// (e.g. <c>192168011</c>).
     /// </summary>
-    /// <param name="rule">The seed rule to apply the factory to.</param>
-    /// <param name="formatted">
-    /// When <c>true</c>, returns a dot-notation address (e.g. <c>192.168.1.1</c>).
-    /// When <c>false</c>, returns the raw concatenated octets (e.g. <c>192168011</c>).
-    /// </param>
     public static SeedBuilder<T> UseIpv4<T>(this SeedRule<T, string> rule, bool formatted = false) where T : class
     {
         return rule.UseFactory(() =>
@@ -83,13 +80,10 @@ public static class InternetSeedRuleExtensions
         });
     }
     /// <summary>
-    /// Generates a random IPv6 address.
+    /// Generates a random IPv6 address. When <paramref name="formatted"/> is <c>true</c>, returns
+    /// colon-separated groups (e.g. <c>2001:0db8:85a3:0000:0000:8a2e:0370:7334</c>); otherwise
+    /// returns the raw lowercase hex string (e.g. <c>20010db885a3000000008a2e03707334</c>).
     /// </summary>
-    /// <param name="rule">The seed rule to apply the factory to.</param>
-    /// <param name="formatted">
-    /// When <c>true</c>, returns a colon-separated groups address (e.g. <c>2001:0db8:85a3:0000:0000:8a2e:0370:7334</c>).
-    /// When <c>false</c>, returns the raw lowercase hex string (e.g. <c>20010db885a3000000008a2e03707334</c>).
-    /// </param>
     public static SeedBuilder<T> UseIpv6<T>(this SeedRule<T, string> rule, bool formatted = false) where T : class
     {
         return rule.UseFactory(() =>
@@ -114,15 +108,11 @@ public static class InternetSeedRuleExtensions
     }
     
     /// <summary>
-    /// Generates a random MAC address.
+    /// Generates a random MAC address. The <paramref name="separator"/> is placed between each octet
+    /// (default <c>':'</c>, e.g. <c>00:1A:2B:3C:4D:5E</c>); pass <c>'-'</c> for Windows-style or
+    /// <c>null</c> for no separator (e.g. <c>001A2B3C4D5E</c>). When <paramref name="uppercase"/> is
+    /// <c>false</c>, returns lowercase hex digits.
     /// </summary>
-    /// <param name="rule">The seed rule to apply the factory to.</param>
-    /// <param name="separator">
-    /// The character used to separate each octet. Defaults to <c>:</c> (e.g. <c>00:1A:2B:3C:4D:5E</c>).
-    /// Use <c>'-'</c> for Windows-style (e.g. <c>00-1A-2B-3C-4D-5E</c>), or <c>null</c> for no separator
-    /// (e.g. <c>001A2B3C4D5E</c>).
-    /// </param>
-    /// <param name="uppercase">When <c>true</c>, returns uppercase hex digits. Defaults to <c>true</c>.</param>
     public static SeedBuilder<T> UseMacAddress<T>(this SeedRule<T, string> rule, char? separator = ':', bool uppercase = true) where T : class
     {
         return rule.UseFactory(() =>
