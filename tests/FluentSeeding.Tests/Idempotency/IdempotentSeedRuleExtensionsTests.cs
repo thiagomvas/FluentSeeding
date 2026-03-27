@@ -33,30 +33,30 @@ public sealed class IdempotentSeedRuleExtensionsTests
     public void UseIdempotentGuid_Factory_ProducesDeterministicValue()
     {
         // Arrange
-        var builder = new SeedBuilder<User>();
-        var rule = builder.RuleFor(u => u.Id);
+        var user = new User();
+        var rule = new SeedBuilder<User>().RuleFor(u => u.Id);
         rule.UseIdempotentGuid();
 
         // Act
-        var value = rule.IndexedValueFactory!(0);
+        rule.Apply(user, 0);
 
         // Assert
-        value.Should().Be(Idempotent.Guid<User>(0));
+        user.Id.Should().Be(Idempotent.Guid<User>(0));
     }
 
     [Test]
     public void UseIdempotentGuid_WithSeed_PassesSeedToFactory()
     {
         // Arrange
-        var builder = new SeedBuilder<User>();
-        var rule = builder.RuleFor(u => u.Id);
+        var user = new User();
+        var rule = new SeedBuilder<User>().RuleFor(u => u.Id);
         rule.UseIdempotentGuid("my-seed");
 
         // Act
-        var value = rule.IndexedValueFactory!(0);
+        rule.Apply(user, 0);
 
         // Assert
-        value.Should().Be(Idempotent.Guid<User>(0, "my-seed"));
+        user.Id.Should().Be(Idempotent.Guid<User>(0, "my-seed"));
     }
 
     #endregion
@@ -81,30 +81,30 @@ public sealed class IdempotentSeedRuleExtensionsTests
     public void UseIdempotentInt_Factory_ProducesDeterministicValue()
     {
         // Arrange
-        var builder = new SeedBuilder<Purchase>();
-        var rule = builder.RuleFor(p => p.Quantity);
+        var purchase = new Purchase();
+        var rule = new SeedBuilder<Purchase>().RuleFor(p => p.Quantity);
         rule.UseIdempotentInt();
 
         // Act
-        var value = rule.IndexedValueFactory!(0);
+        rule.Apply(purchase, 0);
 
         // Assert
-        value.Should().Be(Idempotent.Int<Purchase>(0));
+        purchase.Quantity.Should().Be(Idempotent.Int<Purchase>(0));
     }
 
     [Test]
     public void UseIdempotentInt_WithSeed_PassesSeedToFactory()
     {
         // Arrange
-        var builder = new SeedBuilder<Purchase>();
-        var rule = builder.RuleFor(p => p.Quantity);
+        var purchase = new Purchase();
+        var rule = new SeedBuilder<Purchase>().RuleFor(p => p.Quantity);
         rule.UseIdempotentInt("my-seed");
 
         // Act
-        var value = rule.IndexedValueFactory!(0);
+        rule.Apply(purchase, 0);
 
         // Assert
-        value.Should().Be(Idempotent.Int<Purchase>(0, "my-seed"));
+        purchase.Quantity.Should().Be(Idempotent.Int<Purchase>(0, "my-seed"));
     }
 
     #endregion
@@ -129,30 +129,30 @@ public sealed class IdempotentSeedRuleExtensionsTests
     public void UseIdempotentLong_Factory_ProducesDeterministicValue()
     {
         // Arrange
-        var builder = new SeedBuilder<LongEntity>();
-        var rule = builder.RuleFor(e => e.Score);
+        var entity = new LongEntity();
+        var rule = new SeedBuilder<LongEntity>().RuleFor(e => e.Score);
         rule.UseIdempotentLong();
 
         // Act
-        var value = rule.IndexedValueFactory!(0);
+        rule.Apply(entity, 0);
 
         // Assert
-        value.Should().Be(Idempotent.Long<LongEntity>(0));
+        entity.Score.Should().Be(Idempotent.Long<LongEntity>(0));
     }
 
     [Test]
     public void UseIdempotentLong_WithSeed_PassesSeedToFactory()
     {
         // Arrange
-        var builder = new SeedBuilder<LongEntity>();
-        var rule = builder.RuleFor(e => e.Score);
+        var entity = new LongEntity();
+        var rule = new SeedBuilder<LongEntity>().RuleFor(e => e.Score);
         rule.UseIdempotentLong("my-seed");
 
         // Act
-        var value = rule.IndexedValueFactory!(0);
+        rule.Apply(entity, 0);
 
         // Assert
-        value.Should().Be(Idempotent.Long<LongEntity>(0, "my-seed"));
+        entity.Score.Should().Be(Idempotent.Long<LongEntity>(0, "my-seed"));
     }
 
     #endregion
@@ -177,30 +177,30 @@ public sealed class IdempotentSeedRuleExtensionsTests
     public void UseIdempotentSlug_Factory_ProducesDeterministicValue()
     {
         // Arrange
-        var builder = new SeedBuilder<User>();
-        var rule = builder.RuleFor(u => u.Name);
+        var user = new User();
+        var rule = new SeedBuilder<User>().RuleFor(u => u.Name);
         rule.UseIdempotentSlug();
 
         // Act
-        var value = rule.IndexedValueFactory!(0);
+        rule.Apply(user, 0);
 
         // Assert
-        value.Should().Be(Idempotent.Slug<User>(0));
+        user.Name.Should().Be(Idempotent.Slug<User>(0));
     }
 
     [Test]
     public void UseIdempotentSlug_WithPrefix_PassesPrefixToFactory()
     {
         // Arrange
-        var builder = new SeedBuilder<User>();
-        var rule = builder.RuleFor(u => u.Name);
+        var user = new User();
+        var rule = new SeedBuilder<User>().RuleFor(u => u.Name);
         rule.UseIdempotentSlug("my-prefix");
 
         // Act
-        var value = rule.IndexedValueFactory!(0);
+        rule.Apply(user, 0);
 
         // Assert
-        value.Should().Be("my-prefix-0");
+        user.Name.Should().Be("my-prefix-0");
     }
 
     #endregion

@@ -2,7 +2,6 @@ namespace FluentSeeding.Faker.Extensions;
 
 public static class BrazilianSeedRuleExtensions
 {
-    // Value = ch - '0' (ASCII - 48): digits → 0–9, letters A–Z → 17–42.
     private static readonly Dictionary<char, int> cnpjWeights = new()
     {
         { '0',  0 }, { '1',  1 }, { '2',  2 }, { '3',  3 }, { '4',  4 },

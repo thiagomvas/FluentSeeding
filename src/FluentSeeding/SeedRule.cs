@@ -22,34 +22,13 @@ where T : class
 
     private HashSet<TProperty>? _seenValues;
     private bool _unique = false;
+    private Func<T, int, TProperty>? _factory;
 
     /// <inheritdoc />
     public string PropertyName { get; }
 
     /// <inheritdoc />
     public IReadOnlyCollection<string> Dependencies => _dependencies;
-
-    public Func<TProperty>? ValueFactory
-    {
-        get;
-        set
-        {
-            if (field == value) return;
-            IndexedValueFactory = null;
-            field = value;
-        }
-    }
-
-    public Func<int, TProperty>? IndexedValueFactory
-    {
-        get;
-        set
-        {
-            if (field == value) return;
-            ValueFactory = null;
-            field = value;
-        }
-    }
 
     internal SeedRule(Expression<Func<T, TProperty>> selector, SeedBuilder<T> parent)
     {
@@ -110,7 +89,7 @@ where T : class
     /// </summary>
     public SeedBuilder<T> UseValue(TProperty value)
     {
-        ValueFactory = () => value;
+        _factory = (_, _) => value;
         return Parent;
     }
 
@@ -118,10 +97,9 @@ where T : class
     /// Invokes <paramref name="value"/> once per entity to produce the property value.
     /// Use this when each entity should receive a freshly generated value (e.g. <c>Guid.NewGuid</c>).
     /// </summary>
-    /// <remarks>Setting this clears any previously configured indexed factory.</remarks>
     public SeedBuilder<T> UseFactory(Func<TProperty> value)
     {
-        ValueFactory = value;
+        _factory = (_, _) => value();
         return Parent;
     }
 
@@ -129,10 +107,32 @@ where T : class
     /// Invokes <paramref name="value"/> once per entity, passing the entity's zero-based index in the seed batch.
     /// Useful for generating sequential or index-derived values (e.g. <c>i => $"User {i}"</c>).
     /// </summary>
-    /// <remarks>Setting this clears any previously configured non-indexed factory.</remarks>
     public SeedBuilder<T> UseFactory(Func<int, TProperty> value)
     {
-        IndexedValueFactory = value;
+        _factory = (_, i) => value(i);
+        return Parent;
+    }
+
+    /// <summary>
+    /// Invokes <paramref name="value"/> once per entity, passing the partially-built entity instance.
+    /// Use this when the property value depends on other already-seeded properties
+    /// (e.g. <c>e => e.FirstName + "." + e.LastName + "@example.com"</c>).
+    /// Pair with <see cref="DependsOn{TDep}"/> to guarantee the depended-on properties are set first.
+    /// </summary>
+    public SeedBuilder<T> UseEntityFactory(Func<T, TProperty> value)
+    {
+        _factory = (e, _) => value(e);
+        return Parent;
+    }
+
+    /// <summary>
+    /// Invokes <paramref name="value"/> once per entity, passing the partially-built entity instance
+    /// and the entity's zero-based index in the seed batch.
+    /// Pair with <see cref="DependsOn{TDep}"/> to guarantee the depended-on properties are set first.
+    /// </summary>
+    public SeedBuilder<T> UseEntityFactory(Func<T, int, TProperty> value)
+    {
+        _factory = value;
         return Parent;
     }
 
@@ -145,7 +145,7 @@ where T : class
     {
         if (values == null || values.Length == 0)
             throw new ArgumentException("Values collection cannot be null or empty.", nameof(values));
-        ValueFactory = () => values[Random.Shared.Next(values.Length)];
+        _factory = (_, _) => values[Random.Shared.Next(values.Length)];
         return Parent;
     }
 
@@ -159,7 +159,7 @@ where T : class
         var vals = values as TProperty[] ?? values.ToArray();
         if (values == null || !vals.Any())
             throw new ArgumentException("Values collection cannot be null or empty.", nameof(values));
-        ValueFactory = () => vals.ElementAt(Random.Shared.Next(vals.Count()));
+        _factory = (_, _) => vals[Random.Shared.Next(vals.Length)];
         return Parent;
     }
     #endregion
@@ -177,41 +177,24 @@ where T : class
         _setter(instance, val);
     }
     
+    private TProperty InvokeFactory(T instance, int index) =>
+        _factory != null
+            ? _factory(instance, index)
+            : throw new InvalidOperationException($"No value or factory configured for '{_selector}'.");
+
     private TProperty GenerateValue(T instance, int index)
     {
-        TProperty value;
-        if (ValueFactory != null)
-        {
-            value = ValueFactory();
-        }
-        else if (IndexedValueFactory != null)
-        {
-            value = IndexedValueFactory(index);
-        }
-        else
-        {
-            throw new InvalidOperationException($"No value or factory configured for '{_selector}'.");
-        }
+        var value = InvokeFactory(instance, index);
 
         if (_unique)
         {
             int attempts = 0;
-            do
+            while (!_seenValues!.Add(value))
             {
-                if (_seenValues!.Add(value))
-                    break; 
                 if (attempts++ > 100)
                     throw new InvalidOperationException($"Unable to generate a unique value for '{_selector}' after 100 attempts. Consider expanding the value pool, changing your value factory or removing the uniqueness requirement.");
-                
-                if (ValueFactory != null)
-                {
-                    value = ValueFactory();
-                }
-                else if (IndexedValueFactory != null)
-                {
-                    value = IndexedValueFactory(index);
-                }
-            } while (true);
+                value = InvokeFactory(instance, index);
+            }
         }
 
         return value;
