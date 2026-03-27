@@ -9,8 +9,13 @@ namespace FluentSeeding.Faker.Tests;
 [Category(nameof(PersonSeedRuleExtensions))]
 public sealed class PersonSeedRuleExtensionsTests
 {
-    private static SeedRule<User, string> CreateStringRule()
-        => new SeedBuilder<User>().RuleFor(u => u.Name);
+    private static SeedRule<User, string> CreateStringRule(string? locale = null)
+    {
+        var builder = new SeedBuilder<User>();
+        if (locale is not null)
+            builder.WithLocale(locale);
+        return builder.RuleFor(u => u.Name);
+    }
 
     private static string ApplyOnce(SeedRule<User, string> rule)
     {
@@ -22,121 +27,88 @@ public sealed class PersonSeedRuleExtensionsTests
     [Test]
     public void UseFirstName_WithDefaultSettings_SetsNonEmptyName()
     {
-        // Arrange
         var rule = CreateStringRule();
         rule.UseFirstName();
-
-        // Act & Assert
         ApplyOnce(rule).Should().NotBeNullOrEmpty();
     }
 
     [Test]
     public void UseFirstName_WithGenderMale_SetsNonEmptyName()
     {
-        // Arrange
         var rule = CreateStringRule();
         rule.UseFirstName(Gender.Male);
-
-        // Act & Assert
         ApplyOnce(rule).Should().NotBeNullOrEmpty();
     }
 
     [Test]
     public void UseFirstName_WithGenderFemale_SetsNonEmptyName()
     {
-        // Arrange
         var rule = CreateStringRule();
         rule.UseFirstName(Gender.Female);
-
-        // Act & Assert
         ApplyOnce(rule).Should().NotBeNullOrEmpty();
     }
 
     [Test]
     public void UseFirstName_WithGenderAny_SetsNonEmptyName()
     {
-        // Arrange
         var rule = CreateStringRule();
         rule.UseFirstName(Gender.Any);
-
-        // Act & Assert
         ApplyOnce(rule).Should().NotBeNullOrEmpty();
     }
 
     [Test]
-    public void UseFirstName_WithExplicitLocale_SetsNonEmptyName()
+    public void UseFirstName_WithLocaleOnBuilder_SetsNonEmptyName()
     {
-        // Arrange
-        var rule = CreateStringRule();
-        rule.UseFirstName(locale: "en");
-
-        // Act & Assert
+        var rule = CreateStringRule(locale: "en");
+        rule.UseFirstName();
         ApplyOnce(rule).Should().NotBeNullOrEmpty();
     }
 
     [Test]
     public void UseLastName_WithDefaultSettings_SetsNonEmptyName()
     {
-        // Arrange
         var rule = CreateStringRule();
         rule.UseLastName();
-
-        // Act & Assert
         ApplyOnce(rule).Should().NotBeNullOrEmpty();
     }
 
     [Test]
-    public void UseLastName_WithExplicitLocale_SetsNonEmptyName()
+    public void UseLastName_WithLocaleOnBuilder_SetsNonEmptyName()
     {
-        // Arrange
-        var rule = CreateStringRule();
-        rule.UseLastName("en");
-
-        // Act & Assert
+        var rule = CreateStringRule(locale: "en");
+        rule.UseLastName();
         ApplyOnce(rule).Should().NotBeNullOrEmpty();
     }
 
     [Test]
     public void UseFullName_WithDefaultSettings_SetsNameContainingSpace()
     {
-        // Arrange
         var rule = CreateStringRule();
         rule.UseFullName();
-
-        // Act & Assert
         ApplyOnce(rule).Should().Contain(" ");
     }
 
     [Test]
     public void UseFullName_WithGenderMale_SetsNameContainingSpace()
     {
-        // Arrange
         var rule = CreateStringRule();
         rule.UseFullName(Gender.Male);
-
-        // Act & Assert
         ApplyOnce(rule).Should().Contain(" ");
     }
 
     [Test]
     public void UseFullName_WithGenderFemale_SetsNameContainingSpace()
     {
-        // Arrange
         var rule = CreateStringRule();
         rule.UseFullName(Gender.Female);
-
-        // Act & Assert
         ApplyOnce(rule).Should().Contain(" ");
     }
 
     [Test]
-    public void UseFullName_WithExplicitLocale_SetsNameContainingSpace()
+    public void UseFullName_WithLocaleOnBuilder_SetsNameContainingSpace()
     {
-        // Arrange
-        var rule = CreateStringRule();
-        rule.UseFullName(locale: "en");
-
-        // Act & Assert
+        var rule = CreateStringRule(locale: "en");
+        rule.UseFullName();
         ApplyOnce(rule).Should().Contain(" ");
     }
 }

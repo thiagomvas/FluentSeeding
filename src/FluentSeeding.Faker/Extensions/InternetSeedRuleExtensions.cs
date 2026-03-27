@@ -8,15 +8,15 @@ namespace FluentSeeding.Faker.Extensions;
 public static class InternetSeedRuleExtensions
 {
     /// <summary>
-    /// Generates a random email address using a name and email suffix from <see cref="FluentFaker.DefaultLocale"/>
-    /// (e.g. <c>john.smith@gmail.com</c>).
+    /// Generates a random email address using a name and email suffix drawn from the builder's locale
+    /// (set via <c>WithLocale</c>, falling back to <see cref="FluentFaker.DefaultLocale"/>).
     /// </summary>
     public static SeedBuilder<T> UseEmail<T>(this SeedRule<T, string> rule)
         where T : class
     {
         return rule.UseFactory(() =>
         {
-            var data = FluentFaker.Locale(null);
+            var data = FluentFaker.Locale(rule.Parent.GetLocale());
             var prefix = BuildRandomPrefix(data);
             var suffix = data.Internet.EmailSuffix.Pick();
             return $"{prefix}@{suffix}";
@@ -24,15 +24,15 @@ public static class InternetSeedRuleExtensions
     }
 
     /// <summary>
-    /// Generates a random email address with a random prefix and a fixed <paramref name="suffix"/>
-    /// (e.g. <c>jane.doe@mycompany.com</c>). Uses <see cref="FluentFaker.DefaultLocale"/> for the name pool.
+    /// Generates a random email address with a random name prefix drawn from the builder's locale and a
+    /// fixed <paramref name="suffix"/> (e.g. <c>jane.doe@mycompany.com</c>).
     /// </summary>
     public static SeedBuilder<T> UseEmail<T>(this SeedRule<T, string> rule, string suffix)
         where T : class
     {
         return rule.UseFactory(() =>
         {
-            var data = FluentFaker.Locale(null);
+            var data = FluentFaker.Locale(rule.Parent.GetLocale());
             var prefix = BuildRandomPrefix(data);
             return $"{prefix}@{suffix}";
         });
