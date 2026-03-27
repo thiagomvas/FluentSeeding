@@ -1,4 +1,10 @@
 {
+  "internet": {
+    "email_suffix": [
+      "gmail.com", "yahoo.com.br", "hotmail.com", "outlook.com", "icloud.com",
+      "uol.com.br", "terra.com.br", "bol.com.br", "ig.com.br", "globo.com"
+    ]
+  },
   "person": {
     "first_name": {
       "male": [
