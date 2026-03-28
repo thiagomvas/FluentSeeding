@@ -10,13 +10,14 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\FluentSeeding\FluentSeeding.csproj" />
       <ProjectReference Include="..\..\src\FluentSeeding.AspNetCore\FluentSeeding.AspNetCore.csproj" />
       <ProjectReference Include="..\..\src\FluentSeeding.EntityFrameworkCore\FluentSeeding.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\..\src\FluentSeeding.Faker\FluentSeeding.Faker.csproj" />
     </ItemGroup>
 
 </Project>
