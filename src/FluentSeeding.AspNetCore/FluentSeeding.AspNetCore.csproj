@@ -15,6 +15,12 @@
     <Nullable>enable</Nullable>
     <PackageId>FluentSeeding.AspNetCore</PackageId>
     <Description>Microsoft.Extensions.DependencyInjection integration for FluentSeeding. Registers seeders and related services via IServiceCollection.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>

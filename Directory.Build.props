@@ -11,8 +11,8 @@
     <Authors>Thiago Vasconcelos</Authors>
     <Copyright>Copyright © Thiago Vasconcelos 2026</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/thiagomv/FluentSeeder</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/thiagomv/FluentSeeder</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/thiagomv/FluentSeeding</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/thiagomv/FluentSeeding</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>seeding;fluent;data;database;efcore</PackageTags>
     <VersionPrefix>0.1.0</VersionPrefix>

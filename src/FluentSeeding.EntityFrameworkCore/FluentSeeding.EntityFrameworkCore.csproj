@@ -15,6 +15,12 @@
     <Nullable>enable</Nullable>
     <PackageId>FluentSeeding.EntityFrameworkCore</PackageId>
     <Description>Entity Framework Core persistence layer for FluentSeeding. Implements seeding strategies backed by EF Core DbContext.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>

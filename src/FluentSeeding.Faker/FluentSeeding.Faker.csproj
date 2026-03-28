@@ -6,7 +6,13 @@
         <Nullable>enable</Nullable>
         <PackageId>FluentSeeding.Faker</PackageId>
         <Description>Locale-aware fake data generation for FluentSeeding. Provides realistic names, emails, addresses, and more across multiple locales.</Description>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\FluentSeeding\FluentSeeding.csproj" />
