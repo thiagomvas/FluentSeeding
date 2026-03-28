@@ -282,6 +282,22 @@ public sealed class EntityFrameworkCorePersistenceLayerTests
     }
 
     [Test]
+    public void Run_WithIdempotentSeederAndSkipConflictBehavior_ShouldNotAddDuplicatesOnSecondRun()
+    {
+        // Arrange
+        var layer = new EntityFrameworkCorePersistenceLayer(_dbContext, ConflictBehavior.Skip);
+        EntitySeederBase[] seeders = [new IdempotentProductSeeder()];
+        var runner = new SeederRunner(layer, seeders);
+
+        // Act
+        runner.Run();
+        runner.Run();
+
+        // Assert
+        _dbContext.Products.Should().HaveCount(3);
+    }
+
+    [Test]
     public async Task PersistAsync_WithUpdateConflictBehavior_ShouldUpdateEntityWhenKeyAlreadyExists()
     {
         // Arrange
