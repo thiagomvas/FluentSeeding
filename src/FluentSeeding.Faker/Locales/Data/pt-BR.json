@@ -360,7 +360,20 @@
       "Seguro", "Simples", "Slim", "Smart", "Sol",
       "Sutil", "Total", "Turbo", "Ultra", "Unico",
       "Unido", "Urbano", "Vasto", "Veloz", "Verde",
-      "Vero", "Vital", "Vivo", "Zen"
+      "Vero", "Vital", "Vivo", "Zen",
+      "Aberto", "Absoluto", "Ativo", "Central", "Cheio",
+      "Ciente", "Concreto", "Conectado", "Critico", "Curioso",
+      "Duradouro", "Eficaz", "Energico", "Especial", "Estavel",
+      "Excelente", "Expressivo", "Fiel", "Flexivel", "Fluido",
+      "Genuino", "Gracioso", "Humano", "Impar", "Integro",
+      "Intuitivo", "Jovem", "Limpo", "Logico", "Luminoso",
+      "Maduro", "Maximo", "Minimo", "Nitido", "Objetivo",
+      "Original", "Paciente", "Perfeito", "Popular", "Positivo",
+      "Potente", "Pratico", "Profundo", "Progressivo", "Proximo",
+      "Relevante", "Renovado", "Resolvido", "Robusto", "Racional",
+      "Sereno", "Sincero", "Singular", "Solido", "Sublime",
+      "Tecnico", "Transparente", "Versatil", "Vigoroso", "Inovador",
+      "Integrado", "Funcional", "Eficiente", "Autêntico", "Coeso"
     ],
     "nouns": [
       "Acesso", "Agro", "Ancora", "Arco", "Arena",
@@ -378,7 +391,20 @@
       "Rede", "Rota", "Saude", "Sinal", "Sistema",
       "Solucao", "Startup", "Tech", "Terra", "Torre",
       "Track", "Trilha", "Vale", "Valor", "Vetor",
-      "Via", "Vista", "Zona"
+      "Via", "Vista", "Zona",
+      "Altitude", "Ambiente", "Arquivo", "Avanco", "Balanca",
+      "Barco", "Bloco", "Borda", "Braco", "Cadeia",
+      "Camara", "Carga", "Centro", "Chave", "Circulo",
+      "Classe", "Clima", "Coluna", "Conjunto", "Corrente",
+      "Corte", "Crescimento", "Cristal", "Cultura", "Curva",
+      "Destino", "Dominio", "Escala", "Espaco", "Estrutura",
+      "Fibra", "Fonte", "Horizonte", "Impulso", "Infraestrutura",
+      "Iniciativa", "Lancamento", "Limite", "Linha", "Lista",
+      "Modulo", "Moldura", "Nuvem", "Objeto", "Pista",
+      "Polo", "Processo", "Produto", "Recurso", "Reflexo",
+      "Registro", "Relevo", "Repositorio", "Setor", "Solo",
+      "Suporte", "Superficie", "Topo", "Trajetoria", "Unidade",
+      "Vertice", "Vinculo", "Volume", "Camada", "Circuito"
     ],
     "verbs": [
       "Ativar", "Adaptar", "Alinhar", "Ampliar", "Ancorar",
@@ -390,7 +416,16 @@
       "Otimizar", "Pilotar", "Processar", "Proteger", "Publicar",
       "Resolver", "Sincronizar", "Testar", "Transformar", "Transmitir",
       "Unir", "Verificar", "Visualizar", "Desbloquear", "Evoluir",
-      "Impulsionar"
+      "Impulsionar",
+      "Acelerar", "Acessar", "Acionar", "Ajustar", "Apontar",
+      "Aprimorar", "Arquivar", "Automatizar", "Calibrar", "Capacitar",
+      "Classificar", "Colaborar", "Compilar", "Configurar", "Consolidar",
+      "Coordenar", "Depurar", "Desenvolver", "Digitalizar", "Distribuir",
+      "Emitir", "Estabilizar", "Estruturar", "Formatar", "Gerenciar",
+      "Instalar", "Migrar", "Modelar", "Monitorar", "Organizar",
+      "Planejar", "Priorizar", "Registrar", "Renderizar", "Reutilizar",
+      "Rotear", "Segmentar", "Selecionar", "Simplificar", "Treinar",
+      "Validar", "Certificar", "Compilar", "Documentar", "Padronizar"
     ],
     "adverbs": [
       "Ativamente", "Amplamente", "Audazmente", "Claramente", "Completamente",
@@ -399,7 +434,13 @@
       "Globalmente", "Honestamente", "Intensamente", "Levemente", "Livremente",
       "Localmente", "Precisamente", "Prontamente", "Puramente", "Rapidamente",
       "Seguramente", "Simplesmente", "Solidamente", "Suavemente", "Totalmente",
-      "Unicamente", "Velozmente", "Verdadeiramente", "Virtualmente", "Vivamente"
+      "Unicamente", "Velozmente", "Verdadeiramente", "Virtualmente", "Vivamente",
+      "Agilmente", "Automaticamente", "Brevemente", "Constantemente", "Continuamente",
+      "Cuidadosamente", "Definitivamente", "Especialmente", "Estrategicamente", "Finamente",
+      "Fluidamente", "Frequentemente", "Gradualmente", "Harmonicamente", "Metodicamente",
+      "Notavelmente", "Objetivamente", "Permanentemente", "Plenamente", "Profundamente",
+      "Progressivamente", "Racionalmente", "Regularmente", "Rigorosamente", "Serenamente",
+      "Sistematicamente", "Tecnicamente", "Uniformemente", "Vigorosamente", "Integralmente"
     ],
     "colors": [
       "Amarelo", "Ambar", "Aqua", "Azul", "Branco",
@@ -408,7 +449,13 @@
       "Lavanda", "Lilas", "Lima", "Magenta", "Marrom",
       "Menta", "Oliva", "Prata", "Preto", "Purpura",
       "Rosa", "Roxo", "Rubi", "Salmon", "Teal",
-      "Turquesa", "Verde", "Vermelho", "Violeta"
+      "Turquesa", "Verde", "Vermelho", "Violeta",
+      "Areia", "Bege", "Bordo", "Cafe", "Carmesim",
+      "Castanho", "Champanhe", "Caqui", "Fucsia", "Grena",
+      "Mostarda", "Nude", "Ocre", "Pessego", "Perola",
+      "Petroleo", "Sepia", "Terracota", "Uva", "Acafrao",
+      "Azul-claro", "Azul-escuro", "Cinza-claro", "Verde-claro", "Rosa-escuro",
+      "Ceu", "Ferrugem", "Neve", "Salmao", "Fumaca"
     ],
     "animals": [
       "Aguia", "Albatroz", "Arara", "Boto", "Boi",
@@ -420,7 +467,17 @@
       "Onca", "Orca", "Ornitorrinco", "Papagaio", "Pato",
       "Pelicano", "Pinguim", "Preguica", "Puma", "Raposa",
       "Sagui", "Salamandra", "Tamanduá", "Tigre", "Tucano",
-      "Urso", "Veado", "Zebra"
+      "Urso", "Veado", "Zebra",
+      "Abelha", "Anta", "Aranha", "Baleia", "Borboleta",
+      "Cabra", "Calango", "Camelo", "Canguru", "Caracol",
+      "Coelho", "Cotia", "Crocodilo", "Cutia", "Esquilo",
+      "Foca", "Formiga", "Furao", "Golfinho", "Grilo",
+      "Harpia", "Hiena", "Javali", "Jiboa", "Koala",
+      "Lebre", "Morcego", "Nutria", "Paca", "Panda",
+      "Piranha", "Pomba", "Quati", "Sapo", "Tatu",
+      "Tartaruga", "Gamo", "Ibis", "Lontra", "Peixe-boi",
+      "Tamanduá", "Catitu", "Capivara", "Seriema", "Mutum",
+      "Ariranha", "Queixada", "Ema", "Jabiru", "Sauim"
     ]
   }
 }
