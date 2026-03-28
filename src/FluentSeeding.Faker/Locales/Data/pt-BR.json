@@ -343,5 +343,84 @@
       "Tunísia", "Turquia", "Ucrânia", "Emirados Árabes Unidos",
       "Uruguai", "Venezuela", "Vietnã", "Zimbábue"
     ]
+  },
+  "words": {
+    "adjectives": [
+      "Agil", "Alto", "Amplo", "Audaz", "Belo",
+      "Bom", "Bonito", "Bravo", "Brilhante", "Capaz",
+      "Certo", "Claro", "Corajoso", "Completo", "Criativo",
+      "Denso", "Digital", "Dinamico", "Direto", "Distinto",
+      "Elite", "Exato", "Firme", "Forte", "Fresco",
+      "Futuro", "Gentil", "Global", "Geral", "Grande",
+      "Ideal", "Intenso", "Inteiro", "Justo", "Largo",
+      "Leve", "Livre", "Local", "Leal", "Macro",
+      "Moderno", "Natural", "Nobre", "Novo", "Omni",
+      "Otimo", "Pleno", "Polar", "Preciso", "Primo",
+      "Pro", "Puro", "Rapido", "Real", "Rico",
+      "Seguro", "Simples", "Slim", "Smart", "Sol",
+      "Sutil", "Total", "Turbo", "Ultra", "Unico",
+      "Unido", "Urbano", "Vasto", "Veloz", "Verde",
+      "Vero", "Vital", "Vivo", "Zen"
+    ],
+    "nouns": [
+      "Acesso", "Agro", "Ancora", "Arco", "Arena",
+      "Atlas", "Eixo", "Base", "Caminho", "Campo",
+      "Capital", "Carta", "Ciclo", "Codigo", "Conexao",
+      "Core", "Cubo", "Dados", "Elo", "Empresa",
+      "Energia", "Escudo", "Esfera", "Fluxo", "Forma",
+      "Frente", "Fundacao", "Grade", "Grupo", "Hub",
+      "Ilha", "Index", "Industria", "Insight", "Juncao",
+      "Lab", "Lago", "Lider", "Link", "Logo",
+      "Mapa", "Marca", "Matrix", "Mercado", "Missao",
+      "Motor", "Mundo", "Nexo", "Nicho", "Node",
+      "Nucleo", "Onda", "Passo", "Pico", "Pillar",
+      "Plano", "Plataforma", "Portal", "Pulso", "Radar",
+      "Rede", "Rota", "Saude", "Sinal", "Sistema",
+      "Solucao", "Startup", "Tech", "Terra", "Torre",
+      "Track", "Trilha", "Vale", "Valor", "Vetor",
+      "Via", "Vista", "Zona"
+    ],
+    "verbs": [
+      "Ativar", "Adaptar", "Alinhar", "Ampliar", "Ancorar",
+      "Calcular", "Construir", "Capturar", "Conectar", "Criar",
+      "Definir", "Entregar", "Escalar", "Executar", "Explorar",
+      "Expandir", "Filtrar", "Forjar", "Gerar", "Guiar",
+      "Implementar", "Inovar", "Integrar", "Lancar", "Ligar",
+      "Manter", "Mapear", "Medir", "Mover", "Navegar",
+      "Otimizar", "Pilotar", "Processar", "Proteger", "Publicar",
+      "Resolver", "Sincronizar", "Testar", "Transformar", "Transmitir",
+      "Unir", "Verificar", "Visualizar", "Desbloquear", "Evoluir",
+      "Impulsionar"
+    ],
+    "adverbs": [
+      "Ativamente", "Amplamente", "Audazmente", "Claramente", "Completamente",
+      "Corretamente", "Diretamente", "Dinamicamente", "Eficientemente", "Elegantemente",
+      "Exatamente", "Facilmente", "Firmemente", "Fortemente", "Gentilmente",
+      "Globalmente", "Honestamente", "Intensamente", "Levemente", "Livremente",
+      "Localmente", "Precisamente", "Prontamente", "Puramente", "Rapidamente",
+      "Seguramente", "Simplesmente", "Solidamente", "Suavemente", "Totalmente",
+      "Unicamente", "Velozmente", "Verdadeiramente", "Virtualmente", "Vivamente"
+    ],
+    "colors": [
+      "Amarelo", "Ambar", "Aqua", "Azul", "Branco",
+      "Bronze", "Cinza", "Cobre", "Coral", "Creme",
+      "Dourado", "Esmeralda", "Indigo", "Jade", "Laranja",
+      "Lavanda", "Lilas", "Lima", "Magenta", "Marrom",
+      "Menta", "Oliva", "Prata", "Preto", "Purpura",
+      "Rosa", "Roxo", "Rubi", "Salmon", "Teal",
+      "Turquesa", "Verde", "Vermelho", "Violeta"
+    ],
+    "animals": [
+      "Aguia", "Albatroz", "Arara", "Boto", "Boi",
+      "Capivara", "Cavalo", "Cervo", "Cheetah", "Cobra",
+      "Condor", "Coruja", "Elefante", "Falcao", "Flamingo",
+      "Gato", "Gaviao", "Gorila", "Guepardo", "Hipopotamo",
+      "Jacara", "Jaguar", "Leao", "Leopardo", "Lince",
+      "Lobo", "Lontra", "Macaco", "Manta", "Narvalo",
+      "Onca", "Orca", "Ornitorrinco", "Papagaio", "Pato",
+      "Pelicano", "Pinguim", "Preguica", "Puma", "Raposa",
+      "Sagui", "Salamandra", "Tamanduá", "Tigre", "Tucano",
+      "Urso", "Veado", "Zebra"
+    ]
   }
 }
