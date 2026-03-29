@@ -22,6 +22,7 @@ where T : class
 
     private HashSet<TProperty>? _seenValues;
     private bool _unique = false;
+    private double? _nullChance;
     private Func<T, int, TProperty>? _factory;
 
     /// <inheritdoc />
@@ -39,6 +40,22 @@ where T : class
     }
 
     #region  Modifiers
+
+    /// <summary>
+    /// Gives this rule a <paramref name="chance"/> (0.0–1.0) of producing <see langword="null"/> (or
+    /// <see langword="default"/>) instead of invoking the configured value source.
+    /// For example, <c>0.3</c> means roughly 30 % of seeded entities will have this property set to
+    /// <see langword="null"/>. Intended for nullable properties.
+    /// </summary>
+    /// <param name="chance">Probability of a null result, in the range [0.0, 1.0].</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="chance"/> is outside [0.0, 1.0].</exception>
+    public SeedRule<T, TProperty> Sometimes(double chance = 0.5)
+    {
+        if (chance < 0.0 || chance > 1.0)
+            throw new ArgumentOutOfRangeException(nameof(chance), "Chance must be between 0.0 and 1.0.");
+        _nullChance = chance;
+        return this;
+    }
 
     /// <summary>
     /// Marks this rule as requiring unique values across all seeded entities. If the configured value source produces duplicates, an exception will be thrown at runtime.
@@ -197,6 +214,9 @@ where T : class
 
     private TProperty GenerateValue(T instance, int index)
     {
+        if (_nullChance.HasValue && Random.Shared.NextDouble() < _nullChance.Value)
+            return default!;
+
         var value = InvokeFactory(instance, index);
 
         if (_unique)
