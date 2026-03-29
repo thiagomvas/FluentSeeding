@@ -39,7 +39,9 @@ public static class Idempotent
     /// <returns>A stable UUID v5 GUID uniquely identifying this type/index/seed combination.</returns>
     public static Guid Guid(Type entityType, int index, string? seed = null)
     {
-        var key = $"{entityType.Name}:{seed ?? entityType.Name}:{index}";
+        var key = seed != null
+            ? $"{seed}:{index}"
+            : $"{entityType.Name}:{index}";
         return V5Uuid(Namespace, key);
     }
 

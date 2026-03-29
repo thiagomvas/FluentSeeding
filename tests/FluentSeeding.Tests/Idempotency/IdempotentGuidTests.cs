@@ -42,6 +42,28 @@ public sealed class IdempotentGuidTests
     }
 
     [Test]
+    public void Guid_WhenCalledWithSameSeedAndDifferentTypes_ReturnsSameValue()
+    {
+        // Arrange / Act
+        var user = Idempotent.Guid<User>(0, "shared-seed");
+        var product = Idempotent.Guid<Product>(0, "shared-seed");
+
+        // Assert
+        user.Should().Be(product);
+    }
+
+    [Test]
+    public void Guid_WhenCalledWithNoSeedAndDifferentTypes_ReturnsDifferentValue()
+    {
+        // Arrange / Act
+        var user = Idempotent.Guid<User>(0);
+        var product = Idempotent.Guid<Product>(0);
+
+        // Assert
+        user.Should().NotBe(product);
+    }
+
+    [Test]
     public void Guid_WhenCalledWithNullSeed_BehavesSameAsOmittingSeed()
     {
         // Arrange / Act
