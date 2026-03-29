@@ -23,6 +23,7 @@ where T : class
     private HashSet<TProperty>? _seenValues;
     private bool _unique = false;
     private double? _nullChance;
+    private Func<TProperty, TProperty>? _mutator;
     private Func<T, int, TProperty>? _factory;
 
     /// <inheritdoc />
@@ -54,6 +55,18 @@ where T : class
         if (chance < 0.0 || chance > 1.0)
             throw new ArgumentOutOfRangeException(nameof(chance), "Chance must be between 0.0 and 1.0.");
         _nullChance = chance;
+        return this;
+    }
+
+    /// <summary>
+    /// Applies <paramref name="mutator"/> to the generated value before it is assigned to the entity.
+    /// The mutator receives the value produced by the configured value source and returns the final value.
+    /// Runs after uniqueness is checked, so the mutated value is what gets assigned and not the raw one.
+    /// </summary>
+    /// <param name="mutator">A transform function from the generated value to the final value.</param>
+    public SeedRule<T, TProperty> Mutate(Func<TProperty, TProperty> mutator)
+    {
+        _mutator = mutator;
         return this;
     }
 
@@ -230,7 +243,7 @@ where T : class
             }
         }
 
-        return value;
+        return _mutator != null ? _mutator(value) : value;
     }
 
     private void RegisterEntityDependencies(Expression body, ParameterExpression entityParam)
