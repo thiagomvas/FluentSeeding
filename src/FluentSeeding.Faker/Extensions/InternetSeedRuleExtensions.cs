@@ -181,6 +181,11 @@ public static class InternetSeedRuleExtensions
         });
     }
 
+    /// <summary>
+    /// Generates a random username by combining a random adjective with a random noun, animal, or color
+    /// drawn from the builder's locale (set via <c>WithLocale</c>, falling back to <see cref="FluentFaker.DefaultLocale"/>).
+    /// The result is returned in lowercase (e.g. <c>silentfox</c>).
+    /// </summary>
     public static SeedBuilder<T> UseUsername<T>(this SeedRule<T, string> rule) where T : class
     {
         return rule.UseFactory(() =>
@@ -193,11 +198,20 @@ public static class InternetSeedRuleExtensions
         });
     }
 
+    /// <summary>
+    /// Picks a random top-level domain (e.g. <c>com</c>, <c>net</c>, <c>org</c>) drawn from the builder's locale
+    /// (set via <c>WithLocale</c>, falling back to <see cref="FluentFaker.DefaultLocale"/>).
+    /// </summary>
     public static SeedBuilder<T> UseTld<T>(this SeedRule<T, string> rule) where T : class
     {
         return rule.UseFrom(FluentFaker.Locale(rule.Parent.GetLocale()).Internet.Tlds);
     }
 
+    /// <summary>
+    /// Generates a random domain name by combining two random words with a random TLD, all drawn from the
+    /// builder's locale (set via <c>WithLocale</c>, falling back to <see cref="FluentFaker.DefaultLocale"/>).
+    /// The result is a dot-notation domain (e.g. <c>silentfox.com</c>).
+    /// </summary>
     public static SeedBuilder<T> UseDomain<T>(this SeedRule<T, string> rule, string? tld = null) where T : class
     {
         return rule.UseFactory(() =>
@@ -214,6 +228,9 @@ public static class InternetSeedRuleExtensions
         });
     }
 
+    /// <summary>
+    /// Generates a random 24-bit hex color code prefixed with <c>#</c> (e.g. <c>#A3F0C2</c>).
+    /// </summary>
     public static SeedBuilder<T> UseHexColor<T>(this SeedRule<T, string> rule) where T : class
     {
         return rule.UseFactory(() => $"#{Random.Shared.Next(0x1000000):X6}");

@@ -15,4 +15,7 @@ internal sealed record LocaleData
 
     [JsonPropertyName("words")]
     public WordLocaleData Words { get; init; } = null!;
+    
+    [JsonPropertyName("finance")]
+    public FinanceLocaleData Finance { get; init; } = null!;
 }
