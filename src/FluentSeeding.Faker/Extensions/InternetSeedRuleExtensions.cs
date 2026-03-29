@@ -212,7 +212,11 @@ public static class InternetSeedRuleExtensions
             return $"{part1}{part2}.{tld}";
 
         });
+    }
 
+    public static SeedBuilder<T> UseHexColor<T>(this SeedRule<T, string> rule) where T : class
+    {
+        return rule.UseFactory(() => $"#{Random.Shared.Next(0x1000000):X6}");
     }
 
     private static string BuildRandomPrefix(LocaleData data)
