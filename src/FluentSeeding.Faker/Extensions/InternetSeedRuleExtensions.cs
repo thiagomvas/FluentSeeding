@@ -193,6 +193,11 @@ public static class InternetSeedRuleExtensions
         });
     }
 
+    public static SeedBuilder<T> UseTld<T>(this SeedRule<T, string> rule) where T : class
+    {
+        return rule.UseFrom(FluentFaker.Locale(rule.Parent.GetLocale()).Internet.Tlds);
+    }
+
     private static string BuildRandomPrefix(LocaleData data)
     {
         var first = Sanitize(data.Person.FirstName.GetForGender(Gender.Any).Pick());
