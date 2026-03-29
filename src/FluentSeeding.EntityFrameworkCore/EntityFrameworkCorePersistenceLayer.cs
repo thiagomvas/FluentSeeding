@@ -1,4 +1,7 @@
+using System.Linq.Expressions;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace FluentSeeding.EntityFrameworkCore;
 
@@ -33,19 +36,19 @@ public sealed class EntityFrameworkCorePersistenceLayer : IPersistenceLayer
                 break;
 
             case ConflictBehavior.Skip:
+                var skipKey = GetKeyProperties<T>();
                 foreach (var entity in entities)
                 {
-                    var keyValues = GetKeyValues(entity);
-                    if (_dbContext.Set<T>().Find(keyValues) is null)
+                    if (FindEntity(skipKey, entity) is null)
                         _dbContext.Set<T>().Add(entity);
                 }
                 break;
 
             case ConflictBehavior.Update:
+                var updateKey = GetKeyProperties<T>();
                 foreach (var entity in entities)
                 {
-                    var keyValues = GetKeyValues(entity);
-                    var existing = _dbContext.Set<T>().Find(keyValues);
+                    var existing = FindEntity(updateKey, entity);
                     if (existing is null)
                         _dbContext.Set<T>().Add(entity);
                     else
@@ -65,19 +68,19 @@ public sealed class EntityFrameworkCorePersistenceLayer : IPersistenceLayer
                 break;
 
             case ConflictBehavior.Skip:
+                var skipKey = GetKeyProperties<T>();
                 foreach (var entity in entities)
                 {
-                    var keyValues = GetKeyValues(entity);
-                    if (await _dbContext.Set<T>().FindAsync(keyValues, cancellationToken) is null)
+                    if (await FindEntityAsync<T>(skipKey, entity, cancellationToken) is null)
                         _dbContext.Set<T>().Add(entity);
                 }
                 break;
 
             case ConflictBehavior.Update:
+                var updateKey = GetKeyProperties<T>();
                 foreach (var entity in entities)
                 {
-                    var keyValues = GetKeyValues(entity);
-                    var existing = await _dbContext.Set<T>().FindAsync(keyValues, cancellationToken);
+                    var existing = await FindEntityAsync<T>(updateKey, entity, cancellationToken);
                     if (existing is null)
                         _dbContext.Set<T>().Add(entity);
                     else
@@ -99,21 +102,75 @@ public sealed class EntityFrameworkCorePersistenceLayer : IPersistenceLayer
         return _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private object[] GetKeyValues<T>(T entity) where T : class
+    /// <summary>
+    /// Checks the change tracker first (catches entities staged earlier in the same run,
+    /// including those in Added state), then falls back to a database query that explicitly
+    /// ignores global query filters so that tenant/soft-delete filters cannot hide
+    /// already-persisted rows from conflict detection.
+    /// </summary>
+    private T? FindEntity<T>(IReadOnlyList<IProperty> keyProperties, T entity) where T : class
+    {
+        return FindTracked<T>(keyProperties, entity)
+            ?? _dbContext.Set<T>().IgnoreQueryFilters()
+                .FirstOrDefault(BuildKeyPredicate<T>(keyProperties, entity));
+    }
+
+    private async Task<T?> FindEntityAsync<T>(
+        IReadOnlyList<IProperty> keyProperties,
+        T entity,
+        CancellationToken cancellationToken) where T : class
+    {
+        return FindTracked<T>(keyProperties, entity)
+            ?? await _dbContext.Set<T>().IgnoreQueryFilters()
+                .FirstOrDefaultAsync(BuildKeyPredicate<T>(keyProperties, entity), cancellationToken);
+    }
+
+    /// <summary>
+    /// Searches the local change tracker by primary key, returning any non-deleted tracked
+    /// entity with matching key values. This covers entities staged earlier in the same
+    /// seed run (e.g. Added state) before SaveChanges has been called.
+    /// </summary>
+    private T? FindTracked<T>(IReadOnlyList<IProperty> keyProperties, T entity) where T : class
+    {
+        return _dbContext.ChangeTracker.Entries<T>()
+            .Where(e => e.State != EntityState.Deleted)
+            .FirstOrDefault(entry => keyProperties.All(prop =>
+                Equals(prop.PropertyInfo!.GetValue(entity), prop.PropertyInfo.GetValue(entry.Entity))))
+            ?.Entity;
+    }
+
+    private IReadOnlyList<IProperty> GetKeyProperties<T>() where T : class
     {
         var entityType = _dbContext.Model.FindEntityType(typeof(T))
             ?? throw new InvalidOperationException(
                 $"Entity type '{typeof(T).Name}' is not registered in the DbContext model.");
 
-        var primaryKey = entityType.FindPrimaryKey()
+        return (entityType.FindPrimaryKey()
             ?? throw new InvalidOperationException(
-                $"Entity type '{typeof(T).Name}' has no primary key defined.");
+                $"Entity type '{typeof(T).Name}' has no primary key defined."))
+            .Properties;
+    }
 
-        return primaryKey.Properties
-            .Select(p => p.PropertyInfo is { } pi
-                ? pi.GetValue(entity)!
-                : throw new InvalidOperationException(
-                    $"Shadow property '{p.Name}' on '{typeof(T).Name}' cannot be used for conflict resolution. Only mapped CLR properties are supported."))
-            .ToArray();
+    private static Expression<Func<T, bool>> BuildKeyPredicate<T>(
+        IReadOnlyList<IProperty> keyProperties,
+        T entity) where T : class
+    {
+        var param = Expression.Parameter(typeof(T), "e");
+        Expression? body = null;
+
+        foreach (var prop in keyProperties)
+        {
+            if (prop.PropertyInfo is not { } pi)
+                throw new InvalidOperationException(
+                    $"Shadow property '{prop.Name}' on '{typeof(T).Name}' cannot be used for conflict resolution. Only mapped CLR properties are supported.");
+
+            var value = pi.GetValue(entity);
+            var propAccess = Expression.Property(param, pi);
+            var constant = Expression.Constant(value, prop.ClrType);
+            var equal = Expression.Equal(propAccess, constant);
+            body = body is null ? equal : Expression.AndAlso(body, equal);
+        }
+
+        return Expression.Lambda<Func<T, bool>>(body!, param);
     }
 }
