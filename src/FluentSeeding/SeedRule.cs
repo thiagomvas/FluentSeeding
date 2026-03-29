@@ -165,6 +165,16 @@ where T : class
         _factory = (_, _) => vals[Random.Shared.Next(vals.Length)];
         return Parent;
     }
+
+    /// <summary>
+    /// Assigns <see langword="null"/> (or <see langword="default"/> for value types) to this property on every
+    /// seeded entity. Intended for nullable properties (e.g. <c>string?</c>, <c>int?</c>).
+    /// </summary>
+    public SeedBuilder<T> UseNull()
+    {
+        _factory = (_, _) => default!;
+        return Parent;
+    }
     #endregion
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException">
