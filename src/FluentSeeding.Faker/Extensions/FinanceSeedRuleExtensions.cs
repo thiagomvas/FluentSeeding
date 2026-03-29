@@ -27,4 +27,15 @@ public static class FinanceSeedRuleExtensions
     {
         return rule.UseFrom(FluentFaker.Locale(rule.Parent.GetLocale()).Finance.Banks);
     }
+    
+    /// <summary>
+    /// Generates a random credit card number optionally formatted with dashes.
+    /// </summary>
+    public static SeedBuilder<T> UseCreditCardNumber<T>(this SeedRule<T, string> rule, bool formatted = false) where T : class
+    {
+        if (formatted)
+            return rule.UseFactory(() => "####-####-####-####".FillFormat());
+        return rule.UseFactory(() => "################".FillFormat());
+    }
+
 }
