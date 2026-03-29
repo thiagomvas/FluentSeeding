@@ -20,4 +20,11 @@ public static class FinanceSeedRuleExtensions
         return rule.UseFrom(FluentFaker.Locale(rule.Parent.GetLocale()).Finance.CreditCardType);
     }
     
+    /// <summary>
+    /// Picks a random bank name drawn from the builder's locale (set via <c>WithLocale</c>, falling back to <see cref="FluentFaker.DefaultLocale"/>).
+    /// </summary> 
+    public static SeedBuilder<T> UseBank<T>(this SeedRule<T, string> rule) where T : class
+    {
+        return rule.UseFrom(FluentFaker.Locale(rule.Parent.GetLocale()).Finance.Banks);
+    }
 }
