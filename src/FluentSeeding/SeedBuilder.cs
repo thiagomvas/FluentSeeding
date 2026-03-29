@@ -12,9 +12,11 @@ public sealed class SeedBuilder<T> where T : class
     private Func<T>? _factory;
     private int _countMin = 1;
     private int _countMax = 1;
+    private bool _countExplicitlySet;
     private int _nextIndex = 0;
     private List<List<Action<SeedBuilder<T>>>>? _forEachDimensions;
     private bool _forEachUsed;
+    private IEnumerable<T>? _baseEntities;
 
     /// <summary>
     /// Seeds exactly <paramref name="count"/> entities.
@@ -24,6 +26,7 @@ public sealed class SeedBuilder<T> where T : class
     {
         _countMin = count;
         _countMax = count;
+        _countExplicitlySet = true;
         return this;
     }
 
@@ -42,6 +45,20 @@ public sealed class SeedBuilder<T> where T : class
 
         _countMin = min;
         _countMax = max;
+        _countExplicitlySet = true;
+        return this;
+    }
+
+    /// <summary>
+    /// Configures the builder to use a pool of pre-existing entities as bases instead of creating new instances.
+    /// Rules are still applied on top of each pooled entity. When <see cref="Count(int)"/> is not called,
+    /// the number of entities produced equals the pool size. When <c>Count</c> exceeds the pool size,
+    /// the pool is cycled (round-robin). An empty pool produces no entities.
+    /// </summary>
+    /// <param name="pool">The pre-existing entities to use as bases.</param>
+    public SeedBuilder<T> UsePool(params IEnumerable<T> pool)
+    {
+        _baseEntities = pool;
         return this;
     }
 
@@ -284,15 +301,29 @@ public sealed class SeedBuilder<T> where T : class
             return _forEachDimensions is { Count: > 0 } ? BuildForEach() : Array.Empty<T>();
 
         var sortedRules = TopologicalSort(_rules);
-        var count = Random.Shared.Next(_countMin, _countMax + 1);
-        var entities = new List<T>(count);
 
-        for (int i = 0; i < count; i++)
+        if (_baseEntities != null)
         {
-            entities.Add(CreateInstance(sortedRules, _nextIndex++));
+            var pool = _baseEntities.ToList();
+            if (pool.Count == 0) return Array.Empty<T>();
+
+            var count = _countExplicitlySet
+                ? Random.Shared.Next(_countMin, _countMax + 1)
+                : pool.Count;
+
+            var entities = new List<T>(count);
+            for (int i = 0; i < count; i++)
+                entities.Add(CreateInstance(sortedRules, _nextIndex++, pool[i % pool.Count]));
+            return entities;
         }
 
-        return entities;
+        {
+            var count = Random.Shared.Next(_countMin, _countMax + 1);
+            var entities = new List<T>(count);
+            for (int i = 0; i < count; i++)
+                entities.Add(CreateInstance(sortedRules, _nextIndex++));
+            return entities;
+        }
     }
 
     private IEnumerable<T> BuildForEach()
@@ -309,7 +340,9 @@ public sealed class SeedBuilder<T> where T : class
                 (combo, action) => (IReadOnlyList<Action<SeedBuilder<T>>>) new List<Action<SeedBuilder<T>>>(combo) { action });
         }
 
+        var pool = _baseEntities?.ToList();
         var entities = new List<T>();
+        int comboIndex = 0;
         foreach (var combo in combos)
         {
             // Build a child that inherits the base rules, then apply per-item overrides.
@@ -322,14 +355,16 @@ public sealed class SeedBuilder<T> where T : class
                 action(child);
 
             var sortedRules = TopologicalSort(child._rules);
-            entities.Add(child.CreateInstance(sortedRules, _nextIndex++));
+            T? baseEntity = pool is { Count: > 0 } ? pool[comboIndex % pool.Count] : null;
+            entities.Add(child.CreateInstance(sortedRules, _nextIndex++, baseEntity));
+            comboIndex++;
         }
         return entities;
     }
 
-    private T CreateInstance(List<ISeedRule<T>> sortedRules, int index)
+    private T CreateInstance(List<ISeedRule<T>> sortedRules, int index, T? baseEntity = null)
     {
-        var entity = _factory != null ? _factory() : Activator.CreateInstance<T>()!;
+        var entity = baseEntity ?? (_factory != null ? _factory() : Activator.CreateInstance<T>()!);
         foreach (var rule in sortedRules)
             rule.Apply(entity, index);
         return entity;
