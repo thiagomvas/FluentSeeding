@@ -198,6 +198,23 @@ public static class InternetSeedRuleExtensions
         return rule.UseFrom(FluentFaker.Locale(rule.Parent.GetLocale()).Internet.Tlds);
     }
 
+    public static SeedBuilder<T> UseDomain<T>(this SeedRule<T, string> rule, string? tld = null) where T : class
+    {
+        return rule.UseFactory(() =>
+        {
+            var nouns = FluentFaker.Locale(rule.Parent.GetLocale()).Words.Nouns;
+            var adjectives = FluentFaker.Locale(rule.Parent.GetLocale()).Words.Adjectives;
+            var adverbs = FluentFaker.Locale(rule.Parent.GetLocale()).Words.Adverbs;
+            var part1 = UtilityExtensions.PickFromAny(nouns, adjectives, adverbs);
+            var part2 = nouns.Pick();
+            var tld = FluentFaker.Locale(rule.Parent.GetLocale()).Internet.Tlds.Pick();
+
+            return $"{part1}{part2}.{tld}";
+
+        });
+
+    }
+
     private static string BuildRandomPrefix(LocaleData data)
     {
         var first = Sanitize(data.Person.FirstName.GetForGender(Gender.Any).Pick());
