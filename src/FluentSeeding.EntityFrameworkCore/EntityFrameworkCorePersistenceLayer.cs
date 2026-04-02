@@ -40,7 +40,10 @@ public sealed class EntityFrameworkCorePersistenceLayer : IPersistenceLayer
                 foreach (var entity in entities)
                 {
                     if (FindEntity(skipKey, entity) is null)
+                    {
+                        DetachNavigationProperties(entity);
                         _dbContext.Set<T>().Add(entity);
+                    }
                 }
                 break;
 
@@ -50,7 +53,10 @@ public sealed class EntityFrameworkCorePersistenceLayer : IPersistenceLayer
                 {
                     var existing = FindEntity(updateKey, entity);
                     if (existing is null)
+                    {
+                        DetachNavigationProperties(entity);
                         _dbContext.Set<T>().Add(entity);
+                    }
                     else
                         _dbContext.Entry(existing).CurrentValues.SetValues(entity);
                 }
@@ -72,7 +78,10 @@ public sealed class EntityFrameworkCorePersistenceLayer : IPersistenceLayer
                 foreach (var entity in entities)
                 {
                     if (await FindEntityAsync<T>(skipKey, entity, cancellationToken) is null)
+                    {
+                        DetachNavigationProperties(entity);
                         _dbContext.Set<T>().Add(entity);
+                    }
                 }
                 break;
 
@@ -82,7 +91,10 @@ public sealed class EntityFrameworkCorePersistenceLayer : IPersistenceLayer
                 {
                     var existing = await FindEntityAsync<T>(updateKey, entity, cancellationToken);
                     if (existing is null)
+                    {
+                        DetachNavigationProperties(entity);
                         _dbContext.Set<T>().Add(entity);
+                    }
                     else
                         _dbContext.Entry(existing).CurrentValues.SetValues(entity);
                 }
@@ -149,6 +161,42 @@ public sealed class EntityFrameworkCorePersistenceLayer : IPersistenceLayer
             ?? throw new InvalidOperationException(
                 $"Entity type '{typeof(T).Name}' has no primary key defined."))
             .Properties;
+    }
+
+    /// <summary>
+    /// Clears navigation properties to prevent EF Core from attempting to cascade-add related
+    /// entities that may already be tracked or exist in the database, which causes "cannot be
+    /// tracked" errors in Skip/Update conflict behaviors. Scalar foreign keys are preserved,
+    /// so database relationships are maintained correctly.
+    /// </summary>
+    private void DetachNavigationProperties<T>(T entity) where T : class
+    {
+        var entityType = _dbContext.Model.FindEntityType(typeof(T));
+        if (entityType is null)
+            return;
+
+        foreach (var navigation in entityType.GetNavigations())
+        {
+            var navProperty = navigation.PropertyInfo;
+            if (navProperty is null)
+                continue;
+
+            var navValue = navProperty.GetValue(entity);
+            if (navValue is null)
+                continue;
+
+            // For collection navigations (1-n, n-n), clear the collection
+            if (navigation.IsCollection && navValue is System.Collections.ICollection collection)
+            {
+                if (collection is System.Collections.IList list)
+                    list.Clear();
+            }
+            // For reference navigations (1-1, n-1), set to null
+            else if (!navigation.IsCollection)
+            {
+                navProperty.SetValue(entity, null);
+            }
+        }
     }
 
     private static Expression<Func<T, bool>> BuildKeyPredicate<T>(
